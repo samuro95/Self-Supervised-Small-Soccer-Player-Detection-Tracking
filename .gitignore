@@ -1,0 +1,12 @@
+checkpoints_runs/
+*.png
+*.jpg
+*.jpeg
+*.pth
+*.pt
+*.xz
+*.tar
+*.xml
+*.txt
+venv/
+scripts/detection/runs/
