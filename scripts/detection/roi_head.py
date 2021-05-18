@@ -1,3 +1,5 @@
+#Copyright (c) Soumith Chintala 2016, All rights reserved.
+
 from __future__ import division
 import torch
 import torchvision
@@ -21,9 +23,6 @@ import cv2
 #from softnms_pytorch import soft_nms_pytorch
 
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
-"""
 
 def fastrcnn_loss(class_logits, box_regression, labels, weights, regression_targets, weight_loss = False):
     # type: (Tensor, Tensor, List[Tensor], List[Tensor])

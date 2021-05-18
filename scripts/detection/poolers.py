@@ -7,9 +7,6 @@ from torchvision.ops import roi_align
 from torchvision.ops.boxes import box_area
 
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
-"""
 
 class LevelMapper(object):
     """Determine which FPN level each RoI in a set of RoIs should map to based

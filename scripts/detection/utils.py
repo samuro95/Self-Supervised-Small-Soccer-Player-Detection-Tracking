@@ -1,3 +1,5 @@
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+
 from __future__ import print_function
 
 from collections import defaultdict, deque

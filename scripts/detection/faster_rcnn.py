@@ -15,9 +15,12 @@ from backbone_utils import resnet_fpn_backbone, detnet_fpn_backbone
 from track_embed_head import TrackHeads
 from torchsummary import summary
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
 """
+BSD 3-Clause License
+Copyright (c) Soumith Chintala 2016, 
+All rights reserved.
+"""
+
 
 class FasterRCNN(GeneralizedRCNN):
     """

@@ -12,10 +12,6 @@ import matplotlib.pyplot as plt
 import time
 
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
-"""
-
 class GeneralizedRCNN(nn.Module):
     """
     Main class for Generalized R-CNN.

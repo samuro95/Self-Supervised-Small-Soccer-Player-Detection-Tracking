@@ -9,9 +9,7 @@ from  torchvision.models.detection import _utils as det_utils
 import cv2
 import numpy as np
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
-"""
+
 
 class AnchorGenerator(nn.Module):
     """

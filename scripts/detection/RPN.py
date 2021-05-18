@@ -18,8 +18,10 @@ from torchvision.models.detection.backbone_utils import resnet_fpn_backbone
 from torchvision.ops import boxes as box_ops
 from torchvision.models.detection.transform import resize_boxes
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
+"""
+BSD 3-Clause License
+Copyright (c) Soumith Chintala 2016, 
+All rights reserved.
 """
 
 class RPN(nn.Module):

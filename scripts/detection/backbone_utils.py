@@ -8,8 +8,10 @@ from torchvision.models._utils import IntermediateLayerGetter
 import detnet
 import resnet
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
+"""
+BSD 3-Clause License
+Copyright (c) Soumith Chintala 2016, 
+All rights reserved.
 """
 
 #from torchvision.models import resnet

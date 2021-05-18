@@ -1,3 +1,5 @@
+# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+
 from __future__ import division
 import torch
 import torchvision
@@ -20,9 +22,7 @@ import cv2
 
 #from softnms_pytorch import soft_nms_pytorch
 
-""" Modified from 
-TORCHVISION.MODELS.DETECTION
-"""
+
 
 # the next two functions should be merged inside Masker
 # but are kept here for the moment while we need them

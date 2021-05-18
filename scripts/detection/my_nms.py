@@ -1,13 +1,9 @@
+#Copyright (c) Soumith Chintala 2016, All rights reserved.
+
 import torch
 import torchvision
 import time
 import numpy as np
-
-
-""" Modified from 
-TORCHVISION.OPS
-"""
-
 
 def nms(boxes, scores, iou_threshold):
     """
