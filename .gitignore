@@ -10,3 +10,4 @@ checkpoints_runs/
 *.txt
 venv/
 scripts/detection/runs/
+__pycache__/
