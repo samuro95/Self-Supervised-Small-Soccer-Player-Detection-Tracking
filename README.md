@@ -14,7 +14,10 @@ This work contains code or parts of code taken from the following github reposit
 **Prerequisites**
 
 * Set up a Python3 environment. The code has been developed in python 3.7.  
-* Install packaged given in requirement.txt 
+* Install packages given in requirement.txt 
 
+**Download data**
 
-**Prerequisites**
+* Download evaluation datasets (frames and annotations) "issia" / "SPD" / "TV_soccer" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing)
+
+* 
