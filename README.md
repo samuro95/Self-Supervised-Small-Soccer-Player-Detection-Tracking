@@ -7,5 +7,5 @@ Link of the video presentation : https://drive.google.com/file/d/1rbRKTuIOstUG4F
 
 **Prerequisites**
 
-* Set up a Python environment 
+* Set up a Python3 environment. The code has been developed in python 3.7.  
 * Install packaged given in requirement.txt 
