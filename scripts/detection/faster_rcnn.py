@@ -1,3 +1,5 @@
+#Copyright (c) Soumith Chintala 2016, All rights reserved.
+
 from collections import OrderedDict
 import torch
 from torch import nn

@@ -11,3 +11,4 @@ checkpoints_runs/
 venv/
 scripts/detection/runs/
 __pycache__/
+scripts/other_utils/lighttrack
