@@ -5,7 +5,7 @@ Content will be soon available.
 
 Link of the video presentation : https://drive.google.com/file/d/1rbRKTuIOstUG4FDl0Vem3g3mT8FR9hQa/view?usp=sharing
 
-## Prerequisites
+**Prerequisites**
 
-The software has been tested with python3.7
-- Set up a Python environment 
+* Set up a Python environment 
+* Install packaged given in requirement.txt 
