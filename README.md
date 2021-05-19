@@ -22,13 +22,19 @@ This work contains code or parts of code taken from the following github reposit
 
 * Download evaluation datasets (frames and annotations) "issia" / "SPD" / "TV_soccer" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract them in the data folder
 
+**Player detection**
+
+
+
+**Player tracking**
+
 ## Training 
 
 **Download data**
 
 If you need to realize training, download the training dataset (frames and annotations) "SoccerNet" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it in the data folder
 
-**Automatic self-labeling of the training image**
+**Automatic self-labeling of the training image with the teacher network**
 
 The code for automatic self-labeling of training data is given in script/automatic_annotation. 
 This process is very long to run on the full SoccerNet dataset. If you want to avoid it, we give the result of this automatic annotation in at this [google drive link](). TO COMPLETE. 
@@ -53,5 +59,10 @@ Note that field detection and player detection is runned once and for all and sa
 cd script/automatic_annotation
 python create_dataset.py --data_name SoccerNet --create_data
 ```
+
+**Fine-tuning of the teacher neetwork**
+
+**Training of the student network**
+
 
 
