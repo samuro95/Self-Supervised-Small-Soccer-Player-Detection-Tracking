@@ -22,13 +22,35 @@ This work contains code or parts of code taken from the following github reposit
 
 * Download evaluation datasets (frames and annotations) "issia" / "SPD" / "TV_soccer" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract them in the data folder
 
+**Player detection**
+
+Download the player detection models and extract them in the checkpoints_runs folder 
+* [Fine-tuned Resnet50 teacher model](https://drive.google.com/file/d/1ewjgLM7BHpFv1fAhKCX-wKN2otuFU7Kr/view?usp=sharing) 
+* [Fine-tuned Resnet18 student model](https://drive.google.com/file/d/1_umt5UvyF-XZCVfyNSiugheDzgtviiag/view?usp=sharing)
+
+The script eval_fasterRCNN.py enables to get the mAP score of the model on the dataset of your choice and to save the images along with detected player boxes.
+To save the images use the option '--save_visualization'. Images will be saved in the folder 'script/detection/results'
+* The command below gives an exemple to evaluate and visualize detection with the Resnet50 teacher model on the TV_soccer evauation dataset. 
+```
+cd script/detection
+python eval_fasterRCNN.py --backbone resnet50 --test_dataset_name TV_soccer --save_visualization --checkpoint ../../checkpoints_runs/player_det_resnet50_teacher.pth
+```
+* The command below gives an exemple to evaluate and visualize detection with the Resnet18 student model on the SPD evauation dataset. 
+```
+cd script/detection
+python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visualization --checkpoint ../../checkpoints_runs/player_det_resnet18_student.pth --use_context
+```
+* In order down-scale (and pad) images by a certain factor to work with smaller player, use the command '--scale_transform_test factor'
+
+**Player tracking**
+
 ## Training 
 
 **Download data**
 
 If you need to realize training, download the training dataset (frames and annotations) "SoccerNet" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it in the data folder
 
-**Automatic self-labeling of the training image**
+**Automatic self-labeling of the training image with the teacher network**
 
 The code for automatic self-labeling of training data is given in script/automatic_annotation. 
 This process is very long to run on the full SoccerNet dataset. If you want to avoid it, we give the result of this automatic annotation in at this [google drive link](). TO COMPLETE. 
@@ -53,5 +75,10 @@ Note that field detection and player detection is runned once and for all and sa
 cd script/automatic_annotation
 python create_dataset.py --data_name SoccerNet --create_data
 ```
+
+**Fine-tuning of the teacher neetwork**
+
+**Training of the student network**
+
 
 
