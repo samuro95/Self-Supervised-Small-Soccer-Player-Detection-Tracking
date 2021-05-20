@@ -40,7 +40,7 @@ python eval_fasterRCNN.py --backbone resnet50 --test_dataset_name TV_soccer --sa
 cd script/detection
 python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visualization --checkpoint ../../checkpoints_runs/player_det_resnet18_student.pth --use_context
 ```
-* In order scale and pad images to work with smaller player, use the command '--scale_transform_test'
+* In order down-scale (and pad) images by a certain factor to work with smaller player, use the command '--scale_transform_test factor'
 
 **Player tracking**
 
