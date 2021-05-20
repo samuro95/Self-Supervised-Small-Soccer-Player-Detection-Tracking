@@ -46,6 +46,8 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 ## Training 
 
+### Player detector
+
 **Download data**
 
 If you need to realize training, download the training dataset (frames and annotations) "SoccerNet" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it in the data folder
@@ -80,5 +82,5 @@ python create_dataset.py --data_name SoccerNet --create_data
 
 **Training of the student network**
 
-
+### Player Tracking
 
