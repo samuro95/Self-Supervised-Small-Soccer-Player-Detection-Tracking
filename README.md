@@ -24,7 +24,22 @@ This work contains code or parts of code taken from the following github reposit
 
 **Player detection**
 
+Download the player detection models and extract them in the checkpoints_runs folder 
+* [Fine-tuned Resnet50 teacher model](https://drive.google.com/file/d/1ewjgLM7BHpFv1fAhKCX-wKN2otuFU7Kr/view?usp=sharing) 
+* [Fine-tuned Resnet18 student model](https://drive.google.com/file/d/1_umt5UvyF-XZCVfyNSiugheDzgtviiag/view?usp=sharing)
 
+The script eval_fasterRCNN.py enables to get the mAP score of the model on the dataset of your choice and to save the images along with detected player boxes.
+To save the images use the option '--save_visualization'. 
+* The command below gives an exemple to evaluate and visualize detection with the Resnet50 teacher model on the TV_soccer evauation dataset. 
+```
+cd script/detection
+python eval_fasterRCNN.py --backbone resnet50 --test_dataset_name TV_soccer --save_visualization
+```
+* The command below gives an exemple to evaluate and visualize detection with the Resnet18 student model on the SPD evauation dataset. 
+```
+cd script/detection
+python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visualization
+```
 
 **Player tracking**
 
