@@ -29,7 +29,7 @@ Download the player detection models and extract them in the checkpoints_runs fo
 * [Fine-tuned Resnet18 student model](https://drive.google.com/file/d/1_umt5UvyF-XZCVfyNSiugheDzgtviiag/view?usp=sharing)
 
 The script eval_fasterRCNN.py enables to get the mAP score of the model on the dataset of your choice and to save the images along with detected player boxes.
-To save the images use the option '--save_visualization'. 
+To save the images use the option '--save_visualization'. Images will be saved in the folder 'script/detection/results'
 * The command below gives an exemple to evaluate and visualize detection with the Resnet50 teacher model on the TV_soccer evauation dataset. 
 ```
 cd script/detection
