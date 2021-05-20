@@ -1,4 +1,3 @@
-
 import sys
 sys.path.append('../other_utils/metrics/')
 from pascalvoc import compute_metrics
@@ -111,7 +110,7 @@ def get_transform():
 
 
 def eval(model, test_loader, n_test, test_bs, device, n_update, original_model,
-         writer=None, first_iter=0, get_image=False):
+         writer=None, first_iter=0, get_image=False,show_GT_label=False):
 
     rescale_bbox = [0., 0.]
 
@@ -138,6 +137,7 @@ def eval(model, test_loader, n_test, test_bs, device, n_update, original_model,
     annotation_list = []
     detection_list = []
     scores_list = []
+    images_list=[]
 
     time_list = []
 
@@ -171,6 +171,7 @@ def eval(model, test_loader, n_test, test_bs, device, n_update, original_model,
                     annotation_list.append(annotation)
                     detection_list.append(detection)
                     scores_list.append(score)
+                    images_list.append(images[j])
 
             else:
                 for j in range(len(images)):
@@ -180,6 +181,7 @@ def eval(model, test_loader, n_test, test_bs, device, n_update, original_model,
                     annotation_list.append(annotation)
                     detection_list.append(detection)
                     scores_list.append(score)
+                    images_list.append(images[j])
 
             image_shape = images[0].shape
 
@@ -198,28 +200,29 @@ def eval(model, test_loader, n_test, test_bs, device, n_update, original_model,
                     det_file.write('person ' + str(det_score) + ' ' + str(bbox[0].item()) + ' ' + str(bbox[1].item()) +
                                    ' ' + str(bbox[2].item()) + ' ' + str(bbox[3].item()) + '\n')
 
-    mAP = compute_metrics(gt_txt_path, det_txt_path, iouThreshold=0.5, showPlot=False)
     currentPath = os.path.dirname(os.path.abspath(__file__))
+    mAP = compute_metrics(gt_txt_path, det_txt_path, iouThreshold=0.5, showPlot=False)
     os.chdir(currentPath)
 
     if writer is not None or get_image:
-        show_images = [cv2.cvtColor(np.array(image.cpu()).transpose(1, 2, 0), cv2.COLOR_RGB2BGR) for image in images]
+        show_images = [cv2.cvtColor(np.array(image.cpu()).transpose(1, 2, 0), cv2.COLOR_RGB2BGR) for image in images_list]
         out_tensor = []
         out_array = []
-        for j in range(len(images)):
-            detection = detections[0][j]['boxes'].to(torch.device("cpu"))
-            label = detections[0][j]['labels'].to(torch.device("cpu"))
-            annotation_boxes = targets[j]["boxes"].to(torch.device("cpu"))
-            for d, bbox in enumerate(annotation_boxes):
-                bbox = np.array(enlargeBbox(bbox, rescale_bbox, image_shape))
-                cv2.rectangle(show_images[j],
-                              (int(bbox[0]), int(bbox[1]), int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1])),
-                              (0, 0, 255), 2)
-            for d, bbox in enumerate(detection):
-                if label[d] == 1:
+        for j in range(len(show_images)):
+            detection = detection_list[j]
+            #label = detections[0][j]['labels'].to(torch.device("cpu"))
+            annotation_boxes = annotation_list[j]
+            if show_GT_label :
+                for d, bbox in enumerate(annotation_boxes):
+                    bbox = np.array(enlargeBbox(bbox, rescale_bbox, image_shape))
                     cv2.rectangle(show_images[j],
                                   (int(bbox[0]), int(bbox[1]), int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1])),
-                                  (255, 255, 255), 2)
+                                  (0, 0, 255), 2)
+            for d, bbox in enumerate(detection):
+                #if label[d] == 1:
+                cv2.rectangle(show_images[j],
+                              (int(bbox[0]), int(bbox[1]), int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1])),
+                              (255, 255, 255), 2)
             out_array.append(show_images[j])
             if writer is not None:
                 shape = show_images[j].shape
@@ -235,7 +238,7 @@ def eval(model, test_loader, n_test, test_bs, device, n_update, original_model,
     if get_image:
         return mAP, out_array
     else:
-        return mAP
+        return mAP, None
 
 
 if __name__ == '__main__':
@@ -252,19 +255,23 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint', type=str, default=None)
     parser.add_argument('--scale_transform_test', type=float, default=1.)
     parser.add_argument('--rescale_method', type=str, default='pad')
-    parser.add_argument('--detection_score_thres', type=float, default=0.05)
+    parser.add_argument('--detection_score_thres', type=float, default=0.9)
     parser.add_argument('--eval_original', dest='eval_original', action='store_true')
     parser.set_defaults(eval_original=False)
     parser.add_argument('--n_channel_backbone', type=int, default=5)
     parser.add_argument('--min_anchor', type=int, default=16)
-    parser.add_argument('--use_hard_nms', dest='use_soft_nms', action='store_false')
-    parser.set_defaults(use_soft_nms=True)
+    parser.add_argument('--use_soft_nms', dest='use_soft_nms', action='store_true')
+    parser.set_defaults(use_soft_nms=False)
     parser.add_argument('--use_context', dest='use_context', action='store_true')
     parser.set_defaults(use_context=False)
     parser.add_argument('--use_field_detection', dest='use_field_detection', action='store_true')
     parser.set_defaults(use_field_detection=False)
     parser.add_argument('--use_track_branch', dest='use_track_branch', action='store_true')
     parser.set_defaults(use_track_branch=False)
+    parser.add_argument('--save_visualization', dest='save_visualization', action='store_true')
+    parser.set_defaults(save_visualization=False)
+    parser.add_argument('--show_GT_label', dest='show_GT_label', action='store_true')
+    parser.set_defaults(show_GT_label=False)
     args = parser.parse_args()
     print(args)
 
@@ -316,11 +323,27 @@ if __name__ == '__main__':
         model.to(device)
 
     t1 = time.time()
-    current_mAP = eval(model, test_loader, args.n_test, args.test_bs,
-                       device, 0, args.eval_original)
+    current_mAP, images = eval(model, test_loader, args.n_test, args.test_bs,
+                       device, 0, args.eval_original, get_image=args.save_visualization,
+                               show_GT_label = args.show_GT_label)
     t2 = time.time()
 
     print('evalutation time (sec) : ', str(int(t2 - t1)))
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    vis_path = 'results'
+    os.path.join(dir_path,vis_path)
+    if not os.path.exists(vis_path):
+        os.mkdir(vis_path)
+    vis_path = os.path.join(vis_path,args.name)
+    if not os.path.exists(vis_path):
+        os.mkdir(vis_path)
+    vis_path = os.path.join(vis_path,args.test_dataset_name)
+    if not os.path.exists(vis_path):
+        os.mkdir(vis_path)
+    for i,im in enumerate(images):
+        cv2.imwrite(os.path.join(vis_path,str(i)+'.png'),im*255)
+
+
 
 
 # def extract_stats():

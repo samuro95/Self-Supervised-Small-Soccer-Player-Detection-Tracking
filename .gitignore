@@ -1,4 +1,3 @@
-checkpoints_runs/
 *.png
 *.jpg
 *.jpeg
@@ -8,6 +7,7 @@ checkpoints_runs/
 *.tar
 *.xml
 *.txt
+*.html
 venv/
 scripts/detection/runs/
 __pycache__/
