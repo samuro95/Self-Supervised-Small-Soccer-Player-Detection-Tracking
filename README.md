@@ -55,7 +55,7 @@ If you need to realize training, download the training dataset (frames and annot
 **Automatic self-labeling of the training image with the teacher network**
 
 The code for automatic self-labeling of training data is given in script/automatic_annotation. 
-This process is very long to run on the full SoccerNet dataset. If you want to avoid it, we give the result of this automatic annotation in at this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing). 
+This process is very long to run on the full SoccerNet dataset. If you want to avoid it, we give the result of this automatic annotation in at this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing) in the file "annoration_r1.tar.xz". 
 
 If you are interesting in this annotation process, you can also try and evaluate it on the evaluation datasets. To do so : 
 
