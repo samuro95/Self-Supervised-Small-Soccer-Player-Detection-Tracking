@@ -99,7 +99,8 @@ python create_dataset.py --data_name SoccerNet --create_data
 ```
 
 **Fine-tuning of the teacher network**
-We give the result of this previous automatic annotation in this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing) in the file "annoration_r1.tar.xz". Extract it in the data/SoccerNet subfolder. The structure of the annotation folder mirrors the one of the frame folder.  
+
+* We give the result of this previous automatic annotation in this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing) in the file "annoration_r1.tar.xz". Extract it in the data/SoccerNet subfolder. The structure of the annotation folder mirrors the one of the frame folder.  
 
 
 **Training of the student network**
