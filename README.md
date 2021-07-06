@@ -44,11 +44,9 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 **Player tracking**
 
-### Soccer Player Detection
-
-## Testing 
-
 ## Training 
+
+**Player detection**
 
 **Download data**
 
