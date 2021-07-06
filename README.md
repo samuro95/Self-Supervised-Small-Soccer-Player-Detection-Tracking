@@ -20,7 +20,7 @@ This work contains code or parts of code taken from the following github reposit
 
 **Download data**
 
-* Download evaluation datasets (frames and annotations) "issia" / "SPD" / "TV_soccer" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract them in the data folder
+* Download evaluation datasets (frames and annotations) "issia" / "SPD" / "TV_soccer" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract them in the data folder.
 
 **Player detection**
 
@@ -46,16 +46,38 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 ## Training 
 
+**Player detection**
+
 **Download data**
 
-If you need to realize training, download the training dataset (frames and annotations) "SoccerNet" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it in the data folder
+Download the training dataset "SoccerNet" frames at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it a data/SoccerNet subfolder.
+We extracted our SoccerNet training images in 2445 sequences of 125 frames.
+The data folder must look like this :
+
+
+```
+data
+└───SoccerNet
+│   └───frames
+|       └───0
+│          | frame_0.jpg
+│          | frame_1.jpg
+│          | frame_2.jpg
+|          ...
+|       └───1
+│          | frame_0.jpg
+│          | frame_1.jpg
+│          | frame_2.jpg
+|          ...
+|       ...
+```
 
 **Automatic self-labeling of the training image with the teacher network**
 
 The code for automatic self-labeling of training data is given in script/automatic_annotation. 
-This process is very long to run on the full SoccerNet dataset. If you want to avoid it, we give the result of this automatic annotation in at this [google drive link](). TO COMPLETE. 
+This process is very long to run on the full SoccerNet dataset. If you want to avoid it, you can skip this part, and we will directly give the output annotation data in the next part. 
 
-If you are interesting in this annotation process, you can also try and evaluate it on the evaluation datasets. To do so : 
+If you are interesting in this annotation process, you can also try it and evaluate it on the evaluation datasets. To do so : 
 
 * Clone the [lighttrack](https://github.com/Guanghan/lighttrack) repository in script/other_utils/. And download the corresponding model.
 ```
@@ -76,9 +98,12 @@ cd script/automatic_annotation
 python create_dataset.py --data_name SoccerNet --create_data
 ```
 
-**Fine-tuning of the teacher neetwork**
+**Fine-tuning of the teacher network**
+
+* We give the result of this previous automatic annotation in this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing) in the file "annoration_r1.tar.xz". Extract it in the data/SoccerNet subfolder. The structure of the annotation folder mirrors the one of the frame folder.  
+
 
 **Training of the student network**
 
-
+### Player Tracking
 
