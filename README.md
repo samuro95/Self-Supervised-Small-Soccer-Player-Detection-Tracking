@@ -44,6 +44,16 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 **Player tracking**
 
+The code for tracking is based on the [LightTrack](https://github.com/Guanghan/lighttrack) code. 
+
+* First clone the [LightTrack](https://github.com/Guanghan/lighttrack) repository in 'script/other_utils' 
+* Change the visualizer code of the LightTrack code with the visualizer folder given in 'my_utils' : 
+
+```
+cd script
+cp -r my_utils/visualizer other_utils/lighttrack/
+```
+
 ## Training 
 
 **Player detection**
