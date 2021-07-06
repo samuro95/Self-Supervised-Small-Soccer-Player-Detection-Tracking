@@ -1,35 +1,21 @@
 import sys
 sys.path.append('../other_utils/metrics/')
 from pascalvoc import compute_metrics
-
 import cv2
-from torch.utils.data import DataLoader
-from tqdm import tqdm
 import torchvision
 import torchvision.transforms as T
 import torch.nn.functional as F
 import torchvision.utils
 sys.path.append('../detection')
 from faster_rcnn import FastRCNNPredictor
-from torchvision.models.detection.backbone_utils import resnet_fpn_backbone
-from faster_rcnn import FasterRCNN
-from RPN import RPN
 from faster_rcnn import fasterrcnn_resnet18_fpn, fasterrcnn_resnet50_fpn, fasterrcnn_detnet59_fpn, fasterrcnn_resnet101_fpn, fasterrcnn_resnet34_fpn
-from torchvision.models.detection.rpn import AnchorGenerator
-from soccer_dataset import SoccerDataset
 import torch
-import utils
 from torch.utils.tensorboard import SummaryWriter
 import argparse
 import os
-import shutil
 import numpy as np
 from PIL import Image
-import time
-from coco_utils import get_coco_api_from_dataset
-from coco_eval import CocoEvaluator
 import json
-from tracking_utils import light_track
 from natsort import natsorted, ns
 from collections import defaultdict
 if sys.version_info[0] == 2:

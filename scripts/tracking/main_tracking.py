@@ -12,7 +12,7 @@ def track(
         data_name='issia',
         model_name='frcnn_fpn',
         backbone='resnet18',
-        checkpoint='../../checkpoints_runs/RCNN/resnet18_student.pth',
+        checkpoint='../../checkpoints_runs/player_det_resnet18_student.pth',
         current_model_detection=None,
         weight_loss=False,
         detection_score_thres=0.8,
@@ -160,6 +160,9 @@ def track(
         else:
             annotation_folder = None
 
+        base_dir = '../../data/intermediate/tracking'
+        if not os.path.exists(base_dir):
+            os.mkdir(base_dir)
         base_dir = os.path.join('../../data/intermediate/tracking', data_name)
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
