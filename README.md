@@ -44,9 +44,11 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 **Player tracking**
 
-## Training 
+### Soccer Player Detection
 
-### Player detector
+## Testing 
+
+## Training 
 
 **Download data**
 
@@ -78,7 +80,7 @@ cd script/automatic_annotation
 python create_dataset.py --data_name SoccerNet --create_data
 ```
 
-**Fine-tuning of the teacher neetwork**
+**Fine-tuning of the teacher network**
 
 **Training of the student network**
 
