@@ -1,3 +1,7 @@
+"""
+Copyright (c) 2019 JD Finance America Corporation
+"""
+
 import sys, os, time
 if sys.version_info[0] == 2:
     import xml.etree.cElementTree as ET
