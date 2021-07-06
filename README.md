@@ -50,7 +50,7 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 **Download data**
 
-If you need to realize training, download the training dataset "SoccerNet" frames at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it a data/SoccerNet subfolder.
+Download the training dataset "SoccerNet" frames at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it a data/SoccerNet subfolder.
 We extracted our SoccerNet training images in 2445 sequences of 125 frames.
 The data folder must look like this :
 
@@ -99,7 +99,7 @@ python create_dataset.py --data_name SoccerNet --create_data
 ```
 
 **Fine-tuning of the teacher network**
-We give the result of this previous automatic annotation in this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing) in the file "annoration_r1.tar.xz". 
+We give the result of this previous automatic annotation in this [google drive link](https://drive.google.com/drive/folders/1ZFIxtyNjyBov2z2izNQHGP3k-ECwcOpu?usp=sharing) in the file "annoration_r1.tar.xz". Extract it in the data/SoccerNet subfolder. The structure of the annotation folder mirrors the one of the frame folder.  
 
 
 **Training of the student network**
