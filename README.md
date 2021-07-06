@@ -51,7 +51,7 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 **Download data**
 
 If you need to realize training, download the training dataset "SoccerNet" frames at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it a data/SoccerNet subfolder.
-The SoccerNet frames are divided in 2445 sequences of 125 frames.
+The SoccerNet images are divided in 2445 sequences of 125 frames.
 The data folder must look like this :
 
 
