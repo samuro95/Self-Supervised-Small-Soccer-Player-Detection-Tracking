@@ -58,7 +58,7 @@ cp -r my_utils/visualizer other_utils/lighttrack/
 Use the argument --use_GT_position is order to realize tracking on ground-truth player position data. Without this flag, the code will use the detection model decribed above.
 
 ```
-python main_tracking --data_name issia --visualize --write_video --output_path
+python main_tracking --data_name issia --visualize --write_video --output_path ../../results
 ```
 
 
