@@ -50,7 +50,26 @@ python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visu
 
 **Download data**
 
-If you need to realize training, download the training dataset (frames and annotations) "SoccerNet" at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it in the data folder.
+If you need to realize training, download the training dataset "SoccerNet" frames at this [google drive link](https://drive.google.com/drive/folders/1dE1yzHyBOVGs4A1VlmFTq_TXOT1S5f_b?usp=sharing) and extract it a data/SoccerNet subfolder.
+The data folder must look like this :
+
+
+```
+data
+└───SoccerNet
+│   └───frames
+|       └───0
+│          | frame_0.jpg
+│          | frame_1.jpg
+│          | frame_2.jpg
+|          ...
+|       └───1
+│          | frame_0.jpg
+│          | frame_1.jpg
+│          | frame_2.jpg
+|          ...
+|       ...
+```
 
 **Automatic self-labeling of the training image with the teacher network**
 
