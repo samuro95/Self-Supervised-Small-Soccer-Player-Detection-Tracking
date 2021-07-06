@@ -234,7 +234,7 @@ def light_track(pose_estimator, model_detection, visual_feat_model, layer,
             use_pose, use_visual_feat, imagenet_model,
             display_pose, use_GT_position, flag_method, n_img_max, init_frame,
             frame_interval, write_csv, write_video, keyframe_interval, visualize,
-            use_filter_tracks, thres_count_ids,weight_by_score_det,visual_metric,
+            use_filter_tracks, thres_count_ids,visual_metric,
             N_frame_lost_keep, N_past_to_keep, use_ReID_module,
             N_past_to_keep_reID, max_vis_feat, max_dist_factor_feat, max_vis_reID, max_dist_factor_reID,
             use_track_branch):
@@ -525,7 +525,7 @@ def light_track(pose_estimator, model_detection, visual_feat_model, layer,
                         log = ''
                         bbox_dets_list, bbox_list_prev_frame, past_track_bbox_list_list, track_ids_dict, N_feat = feature_matching(bbox_dets_list,remaining_det_id_list, bbox_list_prev_frame,
                                                         past_track_bbox_list_list, track_ids_dict, visual_metric, max_dist_factor_feat, max_vis_feat, w_visual, w_spacial, w_pose,
-                                                        use_visual_feat, use_pose, weight_by_score_det, image_shape, log, N_past_to_keep, N_feat)
+                                                        use_visual_feat, use_pose, image_shape, log, N_past_to_keep, N_feat)
 
                     if use_ReID_module :
 
@@ -594,7 +594,7 @@ def light_track(pose_estimator, model_detection, visual_feat_model, layer,
                             log = ''
                             bbox_dets_list, bbox_lost_player_list, past_track_bbox_list_list_reID, track_ids_dict, N_reID = feature_matching(bbox_dets_list,remaining_det_id_list, bbox_lost_player_list,
                                                             past_track_bbox_list_list_reID, track_ids_dict, visual_metric, max_dist_factor_reID, max_vis_reID, w_visual, w_spacial, w_pose, use_visual_feat,
-                                                            use_pose, weight_by_score_det, image_shape, log, N_past_to_keep_reID, N_reID)
+                                                            use_pose, image_shape, log, N_past_to_keep_reID, N_reID)
 
                     # if still can not find a match from previous frame, then -1
                     for det_id in range(num_dets):
@@ -789,7 +789,7 @@ def light_track(pose_estimator, model_detection, visual_feat_model, layer,
 
 def feature_matching(bbox_dets_list, remaining_det_id_list, bbox_list_prev_frame, past_track_bbox_list_list, track_ids_dict,
         visual_metric, max_dist_factor, max_vis, w_visual, w_spacial, w_pose, use_visual_feat,
-        use_pose, weight_by_score_det, image_shape, log, N_past_to_keep, N_meth, show_track = False, show_NN = False):
+        use_pose, image_shape, log, N_past_to_keep, N_meth, show_track = False, show_NN = False):
 
     dist_tab = []
     weight_tab = []

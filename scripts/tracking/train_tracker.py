@@ -54,7 +54,7 @@ def get_model_detection(model_name, weight_loss, backbone, pretrained,
             'model not available'
         return model
 
-from main_tracking import track
+#from main_tracking import track
 
 def get_transform(train):
     transforms = []

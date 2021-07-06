@@ -5,104 +5,127 @@ import torch
 from tracking_utils import light_track
 from natsort import natsorted, ns
 import numpy as np
+from argparse import ArgumentParser
 
+if __name__ == '__main__':
 
-def track(
-        pose_model='mobile-deconv',
-        data_name='issia',
-        model_name='frcnn_fpn',
-        backbone='resnet18',
-        checkpoint='../../checkpoints_runs/player_det_resnet18_student.pth',
-        current_model_detection=None,
-        weight_loss=False,
-        detection_score_thres=0.8,
-        use_context=True,
-        anchor_sizes=[32, 64, 128, 256, 512],
-        use_track_branch_model=False,
-        use_track_branch_embed=False,
-        keyframe_interval=1,
-        n_img_max=20,
-        display_pose=False,
-        frame_interval=1,
-        init_frame=100,
-        use_GT_position=False,
-        w_spacial=0.97,
-        w_visual=0.03,
-        w_pose=0,
-        use_IOU=True,
-        use_features=True,
-        use_pose=False,
-        use_visual_feat=True,
-        write_csv=False,
-        write_video=True,
-        flag_method=True,
-        spacial_iou_thresh=0.5,
-        visual_feat_model_name='faster-rcnn',  # or 'vgg' or 'faster-rcnn'
-        imagenet_model=False,
-        visualize=True,
-        rescale_img_factor=0.5,
-        use_filter_tracks=False,
-        thres_count_ids=2,
-        weight_by_score_det=False,
-        use_soft_nms=True,
-        nms_thres=0.4,
-        N_frame_lost_keep=10,
-        N_past_to_keep=1,
-        N_past_to_keep_reID=3,
-        max_vis_feat=4.,
-        max_vis_reID=4.,
-        use_ReID_module=False,
-        visual_metric='l2'):
+    parser = ArgumentParser()
+    parser.add_argument('--data_name', type=str, default='issia')
+    parser.add_argument('--use_GT_position', dest='use_GT_position', action='store_true')
+    parser.set_defaults(use_GT_position=False)
+    parser.add_argument('--rescale_img_factor', type=float, default=1.0)
 
-    issia_test = False
+    parser.add_argument('--model_name', type=str, default='frcnn_fpn')
+    parser.add_argument('--backbone', type=str, default='resnet18')
+    parser.add_argument('--checkpoint', type=str, default='../../checkpoints_runs/player_det_resnet18_student.pth')
+    parser.add_argument('--detection_score_thres', type=float, default=0.8)
+    parser.add_argument('--no_use_context', dest='use_context', action='store_false')
+    parser.set_defaults(use_context=True)
+    parser.add_argument('--no_use_soft_nms', dest='use_soft_nms', action='store_false')
+    parser.set_defaults(use_soft_nms=True)
+    parser.add_argument('--nms_thres', type=float, default=0.4)
+    parser.add_argument('--anchor_sizes', type=int, nargs='+', default=[32, 64, 128, 256, 512])
+    parser.add_argument('--use_track_branch_model', dest='use_track_branch_model', action='store_true')
+    parser.set_defaults(use_track_branch_model=False)
+    parser.add_argument('--use_track_branch_embed', dest='use_track_branch_embed', action='store_true')
+    parser.set_defaults(use_track_branch_embed=False)
 
-    if not use_visual_feat:
-        w_visual = 0
-    if not use_pose:
-        w_pose = 0
-    if visual_feat_model_name == 'faster-rcnn':
-        imagenet_model = False
+    parser.add_argument('--pose_model', type=str, default='mobile-deconv')
+    parser.add_argument('--keyframe_interval', type=int, default=1)
+    parser.add_argument('--frame_interval', type=int, default=1)
+    parser.add_argument('--init_frame', type=int, default=100)
+    parser.add_argument('--n_img_max', type=int, default=50)
+    parser.add_argument('--no_use_IOU', dest='use_IOU', action='store_false')
+    parser.set_defaults(use_IOU=True)
+    parser.add_argument('--spacial_iou_thresh', type=float, default=0.5)
+    parser.add_argument('--no_use_features', dest='use_features', action='store_false')
+    parser.set_defaults(use_features=True)
+    parser.add_argument('--no_use_visual_feat', dest='use_visual_feat', action='store_false')
+    parser.set_defaults(use_visual_feat=True)
+    parser.add_argument('--visual_feat_model_name', type=str, default='faster-rcnn')
+    parser.add_argument('--imagenet_model', dest='imagenet_model', action='store_false')
+    parser.set_defaults(imagenet_model=True)
+    parser.add_argument('--use_pose', dest='use_pose', action='store_true')
+    parser.set_defaults(use_pose=False)
+    parser.add_argument('--weight_loss', dest='weight_loss', action='store_true')
+    parser.set_defaults(weight_loss=False)
+    parser.add_argument('--w_spacial', type=float, default=0.97)
+    parser.add_argument('--w_visual', type=float, default=0.03)
+    parser.add_argument('--w_pose', type=float, default=0.0)
+    parser.add_argument('--visual_metric', type=str, default='l2')
+    parser.add_argument('--use_filter_tracks', dest='use_filter_tracks', action='store_true')
+    parser.set_defaults(use_filter_tracks=False)
+    parser.add_argument('--thres_count_ids', type=int, default=2)
 
-    max_dist_factor_feat = 32 * (1 / rescale_img_factor)
+    parser.add_argument('--use_ReID_module', dest='use_ReID_module', action='store_true')
+    parser.set_defaults(use_ReID_module=False)
+    parser.add_argument('--max_vis_reID', type=int, default=4)
+    parser.add_argument('--max_vis_feat', type=int, default=4)
+    parser.add_argument('--N_past_to_keep_reID', type=int, default=3)
+    parser.add_argument('--N_past_to_keep', type=int, default=1)
+    parser.add_argument('--N_frame_lost_keep', type=int, default=10)
+
+    parser.add_argument('--display_pose', dest='display_pose', action='store_true')
+    parser.set_defaults(display_pose=False)
+    parser.add_argument('--write_csv', dest='write_csv', action='store_true')
+    parser.set_defaults(write_csv=False)
+    parser.add_argument('--write_video', dest='write_video', action='store_true')
+    parser.set_defaults(write_video=False)
+    parser.add_argument('--visualize', dest='visualize', action='store_true')
+    parser.set_defaults(visualize=False)
+    parser.add_argument('--output_path', type=str, default='../../data/intermediate/tracking')
+
+    hparams = parser.parse_args()
+
+    hparams.current_model_detection = None
+    hparams.flag_method = True
+    if not hparams.use_visual_feat:
+        hparams.w_visual = 0
+    if not hparams.use_pose:
+        hparams.w_pose = 0
+    if hparams.visual_feat_model_name == 'faster-rcnn':
+        hparams.imagenet_model = False
+
+    max_dist_factor_feat = 32 * (1 / hparams.rescale_img_factor)
     max_dist_factor_reID = max_dist_factor_feat / 4
 
-    if not use_GT_position:
-        if current_model_detection is None:
+    if not hparams.use_GT_position:
+        if hparams.current_model_detection is None:
             from train_tracker import get_model_detection
-            model_detection = get_model_detection(model_name, weight_loss, backbone, False,
-                                                  False, False, detection_score_thres, False,
-                                                  use_soft_nms, anchor_sizes=anchor_sizes, use_context=use_context,
-                                                  nms_thres=nms_thres, use_track_branch=use_track_branch_model)
-            model_detection.load_state_dict(torch.load(checkpoint))
+            model_detection = get_model_detection(hparams.model_name, hparams.weight_loss, hparams.backbone, False,
+                                                  False, False, hparams.detection_score_thres, False,
+                                                  hparams.use_soft_nms, anchor_sizes=hparams.anchor_sizes, use_context=hparams.use_context,
+                                                  nms_thres=hparams.nms_thres, use_track_branch=hparams.use_track_branch_model)
+            model_detection.load_state_dict(torch.load(hparams.checkpoint))
             model_detection.to(torch.device('cuda'))
             model_detection.eval()
         else:
-            model_detection = current_model_detection
+            model_detection = hparams.current_model_detection
     else:
         model_detection = None
 
-    if use_visual_feat:
-        if visual_feat_model_name == 'faster-rcnn':
-            if current_model_detection is None:
+    if hparams.use_visual_feat:
+        if hparams.visual_feat_model_name == 'faster-rcnn':
+            if hparams.current_model_detection is None:
                 from train_tracker import get_model_detection
-                visual_feat_model = get_model_detection(model_name, weight_loss, backbone, False,
-                                                        False, False, detection_score_thres, False,
-                                                        use_soft_nms, anchor_sizes=anchor_sizes,
-                                                        use_context=use_context, nms_thres=nms_thres,
-                                                        use_track_branch=use_track_branch_model)
-                visual_feat_model.load_state_dict(torch.load(checkpoint))
+                visual_feat_model = get_model_detection(hparams.model_name, hparams.weight_loss, hparams.backbone, False,
+                                                        False, False, hparams.detection_score_thres, False,
+                                                        hparams.use_soft_nms, anchor_sizes=hparams.anchor_sizes,
+                                                        use_context=hparams.use_context, nms_thres=hparams.nms_thres,
+                                                        use_track_branch=hparams.use_track_branch_model)
+                visual_feat_model.load_state_dict(torch.load(hparams.checkpoint))
                 visual_feat_model.to(torch.device('cuda'))
             else:
-                visual_feat_model = current_model_detection
+                visual_feat_model = hparams.current_model_detection
             visual_feat_model.eval()
             layer = visual_feat_model._modules.get('fc7')
 
-        elif visual_feat_model_name == 'resnet50':
+        elif hparams.visual_feat_model_name == 'resnet50':
             visual_feat_model = torchvision.models.resnet50(pretrained=True)
             visual_feat_model.to(torch.device('cuda'))
             visual_feat_model.eval()
             layer = visual_feat_model._modules.get('avgpool')
-        elif visual_feat_model_name == 'vgg19':
+        elif hparams.visual_feat_model_name == 'vgg19':
             visual_feat_model = torchvision.models.vgg19(pretrained=True)
             visual_feat_model.to(torch.device('cuda'))
             visual_feat_model.eval()
@@ -114,14 +137,14 @@ def track(
         visual_feat_model = None
         layer = None
 
-    if use_pose:
-        if pose_model == 'mobile-deconv':
+    if hparams.use_pose:
+        if hparams.pose_model == 'mobile-deconv':
             from network_mobile_deconv import Network
             pose_model_path = "../other_utils/lighttrack/weights/mobile-deconv/snapshot_296.ckpt"
-        elif pose_model == 'MSRA152':
+        elif hparams.pose_model == 'MSRA152':
             from network_MSRA152 import Network
             pose_model_path = "../other_utils/lighttrack/weights/MSRA152/MSRA_snapshot_285.ckpt"
-        elif pose_model == 'CPN101':
+        elif hparams.pose_model == 'CPN101':
             from network_CPN101 import Network
             pose_model_path = '../other_utils/lighttrack/weights/CPN101/CPN_snapshot_293.ckpt'
         else:
@@ -133,19 +156,19 @@ def track(
         pose_estimator = None
 
 
-    if data_name == 'issia':
+    if hparams.data_name == 'issia':
         base_image_folder = '../../data/issia/frames/'
         base_annotation_folder = '../../data/issia/annotations/'
         rescale_bbox = [0., 0.]
-    if data_name == 'SoccerNet':
+    if hparams.data_name == 'SoccerNet':
         base_image_folder = '../../data/SoccerNet/sequences/'
         base_annotation_folder = None
         rescale_bbox = [0., 0.]
-    if data_name == 'panorama':
+    if hparams.data_name == 'panorama':
         base_image_folder = '../../data/panorama/frames/'
         base_annotation_folder = None
         rescale_bbox = [0., 0.]
-    if data_name == 'SPD':
+    if hparams.data_name == 'SPD':
         base_image_folder = '../../data/SPD/frames/'
         base_annotation_folder = None
         rescale_bbox = [0., 0.]
@@ -160,13 +183,13 @@ def track(
         else:
             annotation_folder = None
 
-        base_dir = '../../data/intermediate/tracking'
+        base_dir = hparams.output_path
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
-        base_dir = os.path.join('../../data/intermediate/tracking', data_name)
+        base_dir = os.path.join('../../data/intermediate/tracking', hparams.data_name)
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
-        base_dir = os.path.join('../../data/intermediate/tracking', data_name, str(s))
+        base_dir = os.path.join('../../data/intermediate/tracking', hparams.data_name, str(s))
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
         visualize_folder = os.path.join(base_dir, 'visualize_tracking')
@@ -178,72 +201,27 @@ def track(
         output_video_path = os.path.join(output_folder, "out.mp4")
         output_csv_path = os.path.join(output_folder, "out.csv")
 
-        if write_csv and os.path.exists(output_csv_path):
+        if hparams.write_csv and os.path.exists(output_csv_path):
             continue
 
-        if issia_test:
-            avg_motp = []
-            avg_mota = []
-            avg_idf1 = []
-            acc_tab = []
-            for k in range(5):
-                init_frame = k * 500
-                print('eval tracking on subseq', k)
-                out = light_track(pose_estimator, model_detection, visual_feat_model, layer,
-                                  image_folder, annotation_folder, rescale_bbox, rescale_img_factor,
-                                  visualize_folder, output_video_path, output_csv_path, use_features,
-                                  w_spacial, w_visual, w_pose, use_IOU, spacial_iou_thresh,
-                                  detection_score_thres, use_pose, use_visual_feat, imagenet_model,
-                                  display_pose, use_GT_position, flag_method, n_img_max, init_frame,
-                                  frame_interval, write_csv, write_video, keyframe_interval, visualize,
-                                  use_filter_tracks, thres_count_ids, weight_by_score_det, visual_metric,
-                                  N_frame_lost_keep, N_past_to_keep, use_ReID_module,
-                                  N_past_to_keep_reID, max_vis_feat, max_dist_factor_feat, max_vis_reID,
-                                  max_dist_factor_reID,
-                                  use_track_branch_embed)
-                mota, motp, idf1, acc = out
-                avg_motp.append(motp)
-                avg_mota.append(mota)
-                avg_idf1.append(idf1)
-                acc_tab.append(acc)
-            print('all mota ', np.mean(np.array(avg_mota)))
-            print('all motp ', np.mean(np.array(avg_motp)))
-            print('all idf1 ', np.mean(np.array(avg_idf1)))
 
-            import motmetrics as mm
-
-            mh = mm.metrics.create()
-            summary = mh.compute_many(
-                acc_tab,
-                metrics=mm.metrics.motchallenge_metrics,
-                names=['0', '1', '2', '3'],
-                generate_overall=True)
-
-            strsummary = mm.io.render_summary(
-                summary,
-                formatters=mh.formatters,
-                namemap=mm.io.motchallenge_metric_names
-            )
-            print(strsummary)
-
-            return (np.mean(np.array(avg_mota)), np.mean(np.array(avg_motp)), np.mean(np.array(avg_idf1)))
-
-        else:
-            out = light_track(pose_estimator, model_detection, visual_feat_model, layer,
-                              image_folder, annotation_folder, rescale_bbox, rescale_img_factor,
-                              visualize_folder, output_video_path, output_csv_path, use_features,
-                              w_spacial, w_visual, w_pose, use_IOU, spacial_iou_thresh,
-                              detection_score_thres, use_pose, use_visual_feat, imagenet_model,
-                              display_pose, use_GT_position, flag_method, n_img_max, init_frame,
-                              frame_interval, write_csv, write_video, keyframe_interval, visualize,
-                              use_filter_tracks, thres_count_ids, weight_by_score_det, visual_metric,
-                              N_frame_lost_keep, N_past_to_keep, use_ReID_module,
-                              N_past_to_keep_reID, max_vis_feat, max_dist_factor_feat, max_vis_reID,
-                              max_dist_factor_reID,
-                              use_track_branch_embed)
-
-            return (out)
+        out = light_track(pose_estimator, model_detection, visual_feat_model, layer,
+                          image_folder, annotation_folder, rescale_bbox, hparams.rescale_img_factor,
+                          visualize_folder, output_video_path, output_csv_path, hparams.use_features,
+                          hparams.w_spacial, hparams.w_visual, hparams.w_pose, hparams.use_IOU, hparams.spacial_iou_thresh,
+                          hparams.detection_score_thres, hparams.use_pose, hparams.use_visual_feat, hparams.imagenet_model,
+                          hparams.display_pose, hparams.use_GT_position, hparams.flag_method,hparams.n_img_max, hparams.init_frame,
+                          hparams.frame_interval, hparams.write_csv, hparams.write_video, hparams.keyframe_interval, hparams.visualize,
+                          hparams.use_filter_tracks, hparams.thres_count_ids, hparams.visual_metric,
+                          hparams.N_frame_lost_keep, hparams.N_past_to_keep, hparams.use_ReID_module,
+                          hparams.N_past_to_keep_reID,hparams.max_vis_feat, max_dist_factor_feat, hparams.max_vis_reID,
+                          max_dist_factor_reID,
+                          hparams.use_track_branch_embed)
 
 
-if __name__ == '__main__':
-    track()
+
+
+
+
+
+
