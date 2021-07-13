@@ -28,17 +28,24 @@ Download the player detection models and extract them in the checkpoints_runs fo
 * [Fine-tuned Resnet50 teacher model](https://drive.google.com/file/d/1ewjgLM7BHpFv1fAhKCX-wKN2otuFU7Kr/view?usp=sharing) 
 * [Fine-tuned Resnet18 student model](https://drive.google.com/file/d/1_umt5UvyF-XZCVfyNSiugheDzgtviiag/view?usp=sharing)
 
+
+Run the following command
+```
+mkdir data/intermediate
+```
+
 The script eval_fasterRCNN.py enables to get the mAP score of the model on the dataset of your choice and to save the images along with detected player boxes.
 To save the images use the option '--save_visualization'. Images will be saved in the folder 'script/detection/results'
 * The command below gives an exemple to evaluate and visualize detection with the Resnet50 teacher model on the TV_soccer evauation dataset. 
 ```
 cd script/detection
 python eval_fasterRCNN.py --backbone resnet50 --test_dataset_name TV_soccer --save_visualization --checkpoint ../../checkpoints_runs/player_det_resnet50_teacher.pth
+
 ```
 * The command below gives an exemple to evaluate and visualize detection with the Resnet18 student model on the SPD evauation dataset. 
 ```
 cd script/detection
-python create_dataset.py --backbone resnet18 --test_dataset_name SPD --save_visualization --checkpoint ../../checkpoints_runs/player_det_resnet18_student.pth --use_context
+python eval_fasterRCNN.py --backbone resnet18 --test_dataset_name SPD --save_visualization --checkpoint ../../checkpoints_runs/player_det_resnet18_student.pth --use_context
 ```
 * In order down-scale (and pad) images by a certain factor to work with smaller player, use the command '--scale_transform_test factor'
 
@@ -53,6 +60,14 @@ The code for tracking is based on the [LightTrack](https://github.com/Guanghan/l
 cd script
 cp -r my_utils/visualizer other_utils/lighttrack/
 ```
+
+* Realize tracking on the dataset of your choice. Only the ISSIA evaluation dataset contains tracking ground-truth information. 
+Use the argument --use_GT_position is order to realize tracking on ground-truth player position data. Without this flag, the code will use the detection model decribed above.
+
+```
+python main_tracking --data_name issia --visualize --write_video --output_path ../../results
+```
+
 
 ## Training 
 
