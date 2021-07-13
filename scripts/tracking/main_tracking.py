@@ -183,13 +183,13 @@ if __name__ == '__main__':
         else:
             annotation_folder = None
 
-        base_dir = hparams.output_path
+        base_dir = hparams.output_path + '/output_tracking'
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
-        base_dir = os.path.join('../../data/intermediate/tracking', hparams.data_name)
+        base_dir = os.path.join(base_dir, hparams.data_name)
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
-        base_dir = os.path.join('../../data/intermediate/tracking', hparams.data_name, str(s))
+        base_dir = os.path.join(base_dir, str(s))
         if not os.path.exists(base_dir):
             os.mkdir(base_dir)
         visualize_folder = os.path.join(base_dir, 'visualize_tracking')
